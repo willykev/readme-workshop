@@ -55,6 +55,9 @@ or a real run.
 - [ ] At least one honest limit, if the project has one.
 - [ ] Nothing explains how it was built, what was considered, or what is
       planned.
+- [ ] Every sentence reads like natural, idiomatic English you would say to
+      a colleague — no cramped shorthand, robotic phrasing, or internal
+      workshop jargon.
 - [ ] For an extension: install per host, the trigger, what it can access,
       how to turn it off. If you try the install, do it in a throwaway
       profile of the host (a separate config folder), never the person's

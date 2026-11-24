@@ -1,5 +1,14 @@
 # Changelog
 
+## 0.1.3 — 2026-11-23
+
+- Improved the skill's writing guidance (`references/page.md`), verification
+  pass (`references/verify.md`), and checklist (`references/checklist.md`)
+  so generated READMEs use natural, human language instead of cramped or
+  robotic phrasing.
+- Smoothed out the skill's own descriptions and rewrote `README.md` using
+  the updated writing rules.
+
 ## 0.1.2 — 2026-11-23
 
 - The guide's Codex update is one command, `codex plugin marketplace

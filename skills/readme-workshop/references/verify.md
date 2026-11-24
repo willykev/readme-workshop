@@ -69,11 +69,16 @@ each one on purpose:
    first. Multi-step deployments need their order checked (set up,
    then deploy, then the step that needs the deploy's output). Run it in a
    throwaway container when one is available.
-9. **Pictures match the words.** Read how each picture was made (its
-   capture script and options). A picture drawn with non-default settings
-   (a different size, color or mode) cannot illustrate the default
+9. **Screenshots match the words.** Read how each screenshot or recording was
+   made (its capture script and options). One captured with non-default
+   settings (a different size, color, or mode) cannot illustrate the default
    behavior; caption it for what it shows, or place it where the page
    describes those settings.
+10. **Read it aloud.** Read every sentence as if explaining the project to a
+    colleague. Rewrite anything that sounds cramped, overly literal, or
+    robotic (for example, compressed phrasing like "settles the reader" or
+    "what a user meets"), and remove any internal workshop jargon ("decision
+    card", "surfaces", "enabler") that leaked into the draft.
 
 ## Then
 

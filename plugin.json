@@ -1,8 +1,8 @@
 {
   "$schema": "https://agent-plugins.org/schemas/1.0.0/plugin.schema.json",
   "name": "readme-workshop",
-  "version": "0.1.2",
-  "description": "Writes, reviews and updates README files for any project: apps, command-line tools, services, libraries, agent skills and plugins, MCP servers and GitHub Actions. Reads the code to find what an installer cares about, agrees on each step with you before writing, and never invents output, numbers or pictures.",
+  "version": "0.1.3",
+  "description": "Writes, reviews, and updates README files for any project: apps, command-line tools, services, libraries, agent skills and plugins, MCP servers, and GitHub Actions. Reads the code to find what new users need to know, walks through each step with you before writing, and never invents output, benchmarks, or screenshots.",
   "author": {
     "name": "readme-workshop contributors"
   },

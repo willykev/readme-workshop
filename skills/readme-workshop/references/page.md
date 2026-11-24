@@ -187,15 +187,31 @@ The [guide](docs/guide.md) covers every command and setting, backups and trouble
 
 ## Writing
 
-- Write to the person using it, in plain words: "Run", "your recipes",
+Write for a human reader, the way you would explain the project to a colleague out loud:
+
+- **Natural first, concise second.** Plain and honest does not mean stiff or
+  telegraphic. Cutting hype means cutting empty adjectives ("blazing",
+  "seamless"), not cutting normal phrasing. If a sentence feels cramped or
+  nobody would say it out loud, rewrite it:
+  - *Stiff:* "It settles the reader, the highlights and the plan with you."
+    *Natural:* "It works through the audience, key features, and outline with you."
+  - *Stiff:* "A scanner lists what a user meets."
+    *Natural:* "A scanner finds the commands, exports, and options users interact with."
+  - *Stiff:* "An example marker keeps a block equal to a file."
+    *Natural:* "Comment markers keep code examples in sync with files in your repo."
+- **Leave workshop jargon out.** Terms like "decision card", "surfaces",
+  "enabler", or "proof" are for your own notes, not the finished README. Use
+  the everyday words a reader expects ("screenshots" or "demos" instead of
+  "pictures", "users" or "readers" instead of "strangers" or "installers").
+- Address the reader directly in plain words: "Run", "your recipes",
   "nothing to configure".
 - Prefer the specific: a key, a path, a number, an input the reader could
   type.
-- Flat statements read as trustworthy: "It never connects to the network."
+- Direct statements read as trustworthy: "It never connects to the network."
 - Keys in backticks or `<kbd>`, one style per page. Commands in code
   spans.
-- No jokes that need the in-group, no thanks, no "and much more", no "whether
-  you're a beginner or an expert".
+- No inside jokes, no filler ("and much more", "whether you're a beginner or
+  an expert").
 - Use the project's spelling and terms as its code and interface use them.
 
 ## What stays out

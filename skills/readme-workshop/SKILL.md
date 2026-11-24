@@ -1,18 +1,18 @@
 ---
 name: readme-workshop
-description: Write, review or update a project's README together with the person who owns it. Use when someone asks to write, draft, rewrite, improve, review, audit or update a README, its user guide (docs/guide.md) or the pictures and examples in it, for any kind of project - desktop, web or mobile apps, command-line and terminal tools, services, libraries and SDKs, agent skills and plugins, MCP servers, editor and browser extensions, GitHub Actions and hooks. It reads the code to find what someone deciding whether to install cares about, proposes the reader, the features to highlight, the pitch and the exact draft one step at a time for the person to agree, checks every claim against the code, and never invents output, numbers or pictures. Not for API reference generation, changelogs or documentation websites.
+description: Write, review, or update a project's README with the person who owns it. Use when someone asks to write, draft, rewrite, improve, review, audit, or update a README, its user guide (docs/guide.md), or its screenshots and examples, for any kind of project - desktop, web, or mobile apps, command-line and terminal tools, services, libraries and SDKs, agent skills and plugins, MCP servers, editor and browser extensions, GitHub Actions, and hooks. Reads the code to find what a new user needs to know, walks through the audience, key features, outline, and final draft step by step for approval, checks every claim against the code, writes in natural human language, and never invents output, numbers, or screenshots. Not for API reference generation, changelogs, or documentation websites.
 license: MIT
 compatibility: The bundled scripts need Python 3.11 or later (standard library only) and a shell. Without them the skill still works, with less checking.
 ---
 
 # README workshop
 
-A README has one reader who matters: a stranger deciding, in about a minute,
-whether to install. The page answers four questions, in this order:
+A README has one reader who matters: someone deciding, in about a minute,
+whether to try your project. The page answers four questions, in this order:
 
-1. **What is it?** A plain category, what it works with, and the difference.
-2. **What does it look like working?** A picture, or for code with no window,
-   a real input and its real result.
+1. **What is it?** A plain category, what it works with, and what makes it different.
+2. **What does it look like working?** A screenshot or demo, or for code with
+   no UI, a real input and its real output.
 3. **How do I get it?** One command block that runs as written.
 4. **What do I do first?** The first useful result, start to finish.
 
@@ -153,6 +153,8 @@ draft from memory.
      does not illustrate the default behavior.
   7. **Shell traps and scope words**: quoting (`!`, `$`), commands that need
      earlier state, "made for" or "not supported" claims.
+  8. **Read it aloud**: rewrite any sentence that sounds cramped, robotic, or
+     unnatural, and strip out internal workshop jargon.
 - Check the whole change set without touching the project: put the draft
   and every new file (pictures, examples) at their final paths in the
   scratch copy, and check that copy:

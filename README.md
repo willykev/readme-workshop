@@ -1,21 +1,21 @@
 # readme-workshop
 
-readme-workshop is an agent skill that writes, reviews and updates a
-project's README with you, in Claude Code, Codex, Grok, Antigravity and other
-agents that read Agent Skills. It reads the code, settles the reader, the
-highlights and the plan with you one step at a time, and changes nothing
-until you have seen the exact page.
+readme-workshop is an agent skill that helps you write, review, and update
+a project's README in Claude Code, Codex, Grok, Antigravity, and other
+agents that support Agent Skills. It reads your codebase, works through the
+audience, key features, and outline with you step by step, and does not
+touch any files until you approve the final draft.
 
 [Install](#install) · [Guide](docs/guide.md) · [Changelog](CHANGELOG.md)
 
-In a project, ask your agent:
+In any project, ask your agent:
 
 > Use readme-workshop to write a README for this project.
 
-It reads the code and comes back with what it found, for you to correct
-before it plans anything. This is its first reply in a real Claude
-Code session, on a small sample recipe tool called cookconv (trimmed; the
-[whole reply](docs/example-session.md)):
+It inspects the repository first and comes back with what it found so you
+can correct anything before it plans the page. Here is its first reply in a
+real Claude Code session on a sample recipe tool called cookconv (trimmed;
+see the [full reply](docs/example-session.md)):
 
 > **What I found (stop 1 of 4)**
 >
@@ -40,19 +40,19 @@ Code session, on a small sample recipe tool called cookconv (trimmed; the
 
 ## Install
 
-You need an agent that can read files and run shell commands. The skill's
-two scripts need Python 3.11 or later; without it the skill still works,
-with less checking. In Claude Code:
+You need an agent that can read files and run shell commands. The two
+bundled scripts need Python 3.11 or later; without Python, the skill still
+works with fewer automated checks. In Claude Code:
 
 ```sh
 claude plugin marketplace add willykev/readme-workshop
 claude plugin install readme-workshop@readme-workshop
 ```
 
-Start a new session; `claude plugin list` shows it as enabled.
+Start a new session, then run `claude plugin list` to confirm it is enabled.
 
 <details>
-<summary>Codex, Grok, Antigravity and other agents</summary>
+<summary>Codex, Grok, Antigravity, and other agents</summary>
 
 ```sh
 # Codex
@@ -71,108 +71,115 @@ gh skill install willykev/readme-workshop readme-workshop --agent claude-code
 
 </details>
 
-To try a change from a clone, start Claude Code with
+To test local changes from a clone, start Claude Code with
 `claude --plugin-dir path/to/readme-workshop`.
 
-Update with `claude plugin update readme-workshop`; switch it off with
-`claude plugin disable readme-workshop`; remove it with `claude plugin
-uninstall readme-workshop`, then `claude plugin marketplace remove
-readme-workshop` to forget the catalog. It keeps nothing else. The
-[guide](docs/guide.md#update-switch-off-and-remove) has the same for each agent.
+Update with `claude plugin update readme-workshop`, disable with
+`claude plugin disable readme-workshop`, or remove with `claude plugin
+uninstall readme-workshop` followed by `claude plugin marketplace remove
+readme-workshop`. It leaves nothing else behind. See the
+[guide](docs/guide.md#update-switch-off-and-remove) for the equivalent
+commands in each agent.
 
 ## Write your first README
 
-Ask in a project: **"Use readme-workshop to write a README for this
-project."** It reads the code, then stops four times:
+In your project, ask: **"Use readme-workshop to write a README for this
+project."** The agent inspects the codebase and pauses four times for your
+input:
 
-1. **What I found:** what the project is, who it is for, how it installs,
-   the first result, and what it could not tell from the code.
-2. **What to highlight:** eight to twelve candidates with their evidence;
-   it marks the ones it recommends.
-3. **The plan:** three pitches, the sections, and how it will show the
-   project working.
-4. **The exact draft:** the whole page, every file it would add, and the
-   claims it could not verify.
+1. **What it found:** what the project does, who it is for, how to install
+   it, the first useful result, and anything it could not determine from
+   the code.
+2. **What to highlight:** 8 to 12 candidate features with file-and-line
+   evidence, with its recommended picks marked.
+3. **The plan:** three one-sentence pitches to choose from, the section
+   order, and how it plans to demonstrate the project working.
+4. **The final draft:** the complete README, every file it will add or
+   change, the checker's output, and any claims it could not verify.
 
-Reply "ok" to accept a stop, or say what to change. It writes only after you
-accept the draft at stop 4. "Just write it" skips to stop 4, and it still
-asks. It handles the other README jobs the same way:
+Reply "ok" to accept a stop, or tell it what to change. Nothing is written
+until you approve the draft at stop 4. Saying "just write it" skips ahead
+to stop 4, and it still asks before writing. The other modes work the same
+way:
 
-| Ask it to | It does | Changes in your project |
+| Ask it to | What it does | Files changed |
 |---|---|---|
-| Improve or rewrite the README | The four stops, plus where each part of the old page goes | The files you accept at stop 4 |
-| Review the README | A report: claims that don't match the code, what is missing, the three changes that matter most | Nothing |
-| Update the README after changes | Proposes only what changed since the commit that last touched the README | The files you accept |
-| Make screenshots or examples | Stops 3 and 4 only, with real runs in a copy of the project | The files you accept |
-| Write the user guide | The same stops, for `docs/guide.md` | The files you accept |
+| Improve or rewrite the README | Runs the four stops and shows where each section of the old README goes | Only the files you approve at stop 4 |
+| Review the README | Reports claims that don't match the code, what is missing, and the three highest-impact edits | None |
+| Update the README after changes | Proposes updates only for what changed since the last commit that touched the README | Only the files you approve |
+| Make screenshots or examples | Runs stops 3 and 4, capturing real output in a temporary copy of the project | Only the files you approve |
+| Write the user guide | Runs the same four stops for `docs/guide.md` | Only the files you approve |
 
 ## Features
 
-- **Evidence for every claim.** A scanner lists what a user meets
-  (commands, exports, tools, Action inputs, install channels) with the file
-  and line for each, and each sentence is checked against the code before
-  you see the draft.
-- **Real output only.** Examples and pictures come from runs in a scratch
-  copy, and an example marker keeps a block equal to a file in the project.
-- **Any kind of project.** Apps, command-line tools, services, libraries,
-  agent skills and plugins, MCP servers and GitHub Actions.
-- **A checker for CI.** `check_readme.py` finds links to missing files and
-  headings, leftover placeholders, examples that no longer match their
-  file, names that don't match the code, and secrets.
+- **Every claim backed by code.** Scans your repository for CLI commands,
+  exports, MCP tools, Action inputs, and install methods with file and line
+  numbers, then verifies every sentence against the source before showing
+  you a draft.
+- **Real output, never fabricated.** Captures command output and
+  screenshots by running your project in a temporary copy, and uses comment
+  markers to keep README code blocks in sync with files in your repo.
+- **Works for any kind of project.** Supports desktop and web apps,
+  command-line tools, services, libraries, agent skills and plugins, MCP
+  servers, and GitHub Actions.
+- **Built-in CI checker.** `check_readme.py` catches broken links and
+  anchors, leftover placeholders, stale examples, command or option names
+  that don't match the code, and accidental secrets.
 
 ## Check a README in CI
 
-The checker runs as a GitHub Action and shows its findings as annotations
-on the pull request. The job fails on errors, and on warnings with
-`strict: true`. It needs only `contents: read`:
+The checker runs as a GitHub Action and reports findings as pull request
+annotations. It fails the job on errors, and on warnings when `strict:
+true`. It only needs `contents: read`:
 
 ```yaml
-- uses: willykev/readme-workshop@v0.1.2
+- uses: willykev/readme-workshop@v0.1.3
   with:
-    use-config: false   # for pull requests from outside contributors
+    use-config: false   # recommended for pull requests from forks
 ```
 
 All six inputs are optional; the [guide](docs/guide.md#the-github-action)
-lists them, with how to pin a commit instead of a tag. To run the same
-checks locally, from a clone of this repository on a project beside it:
+lists them and explains how to pin by commit SHA instead of a tag. To run
+the same checks locally from a clone of this repo against a sibling project:
 
 ```sh
 python3 -I -B skills/readme-workshop/scripts/check_readme.py --root ../my-project --readme README.md
 ```
 
-It exits 1 on errors, and on warnings with `--strict`. The
-[guide](docs/guide.md#rules) lists every rule.
+It exits 1 on errors (and on warnings with `--strict`). See the
+[guide](docs/guide.md#rules) for the full list of rules.
 
 ## What it touches
 
-- The scripts read only inside the project (and a settings file you name
-  with `--config`) and write nothing to it. They never run its code, and
-  the only program they start is git, with the repository's own hooks,
-  filters and helpers turned off. Values that look
-  like secrets are hidden in their output.
-- The agent runs the project only after you agree to it at stop 3, in a
-  copy outside the project. That copy keeps your project clean but is not a
-  sandbox: for code you do not trust, use a container, or run the commands
-  yourself.
-- It writes only the files you accepted at stop 4, unless you asked it to
-  [work without questions](docs/guide.md#work-without-questions); even then
-  it never replaces an existing README.
-- The scripts make no network calls. Anything the agent fetches to build
-  or run the project is part of the plan you agree to at stop 3.
+- **Read-only scripts.** `discover.py` and `check_readme.py` only read
+  inside the target project (plus a config file you pass via `--config`)
+  and never write to it. They never execute project code; the only external
+  command they run is `git`, with repo hooks, filters, and helpers disabled.
+  Values that look like secrets are redacted from their output.
+- **Isolated runs.** The agent only runs your project after you approve it
+  at stop 3, and always in a temporary copy outside your repo. That keeps
+  your working tree clean, though it is not a security sandbox — for
+  untrusted code, use a container or run the commands yourself.
+- **Explicit writes.** It only writes files you approved at stop 4, unless
+  you explicitly ask it to [work without questions](docs/guide.md#work-without-questions);
+  even then, it never overwrites an existing README.
+- **No network calls from scripts.** Neither script makes network requests.
+  Anything the agent needs to fetch to build or run your project is part of
+  the plan you approve at stop 3.
 
 ## Limits
 
-- It shows only what it can run where your agent runs. A desktop app needs
-  a way to draw its own window, or a capture script; when there is none, the
-  draft says so instead of faking a picture.
-- It does not write API references, changelogs or documentation sites; it
-  links to the ones you have.
-- The result is only as careful as the agent running it, which is why every
-  claim it could not verify is listed at stop 4.
+- It can only capture what can run in your agent's environment. A desktop
+  app needs a way to render its own window or a capture script; if neither
+  is available, the draft notes the gap instead of faking a screenshot.
+- It does not generate API references, changelogs, or documentation sites;
+  it links to the ones you already have.
+- Verification is only as thorough as the agent running it, which is why
+  any claim it could not verify is listed explicitly at stop 4.
 
 ## More
 
-The [guide](docs/guide.md) covers each mode, both scripts and every rule,
-the Action, and troubleshooting. See the [changelog](CHANGELOG.md) for what
-is new, [CONTRIBUTING](CONTRIBUTING.md) to change the skill, and the
-[MIT license](LICENSE).
+The [guide](docs/guide.md) covers every mode, both scripts, all checker
+rules, the GitHub Action, and troubleshooting. See the
+[changelog](CHANGELOG.md) for releases, [CONTRIBUTING](CONTRIBUTING.md) to
+contribute, and the [MIT license](LICENSE).

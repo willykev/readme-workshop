@@ -297,13 +297,13 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
-      - uses: willykev/readme-workshop@v0.1.2
+      - uses: willykev/readme-workshop@v0.1.3
         with:
           use-config: false
 ```
 
 A tag can be moved after you review it; for a fixed version, use the
-release's full commit SHA in place of `v0.1.2`, with the version in a
+release's full commit SHA in place of `v0.1.3`, with the version in a
 comment, and let Dependabot keep it current.
 
 | Input | Default | Does |

@@ -8,7 +8,7 @@
     {
       "name": "readme-workshop",
       "source": "./",
-      "description": "Writes, reviews and updates README files for any project: apps, command-line tools, services, libraries, agent skills and plugins, MCP servers and GitHub Actions. Reads the code to find what an installer cares about, agrees on each step with you before writing, and never invents output, numbers or pictures."
+      "description": "Writes, reviews, and updates README files for any project: apps, command-line tools, services, libraries, agent skills and plugins, MCP servers, and GitHub Actions. Reads the code to find what new users need to know, walks through each step with you before writing, and never invents output, benchmarks, or screenshots."
     }
   ]
 }

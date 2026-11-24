@@ -49,7 +49,7 @@ Is this right? Correct anything that isn't, and:
 ```markdown
 **What to highlight** (stop 2 of 4)
 
-Ranked by what a newcomer meets first and needs to decide; ★ = recommended for the feature list.
+Ranked by what a new user runs into first and needs to decide; ★ = recommended for the feature list.
 
 ★ 1. **Scale to any serving count.** `--serves 6` rescales every quantity. cli.py:40, 12 tests. Score 6.
 ★ 2. **Metric or US units.** `--to metric` converts cups, ounces and °F. convert.py:15. Score 6.

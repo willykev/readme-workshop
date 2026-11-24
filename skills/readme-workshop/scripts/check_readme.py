@@ -38,7 +38,7 @@ import mdfacts  # noqa: E402
 import safety  # noqa: E402
 from safety import PRIVATE_KEY_RE, SECRETS, redact  # noqa: E402,F401  (redact is part of this module's interface)
 
-TOOL, VERSION = "check_readme", "0.1.2"
+TOOL, VERSION = "check_readme", "0.1.3"
 
 # Prose words a README of each kind reads best with (RW101). With several
 # kinds, the widest range applies.
