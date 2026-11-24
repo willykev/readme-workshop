@@ -13,7 +13,6 @@ later runs the scripts and the tests.
 | `skills/readme-workshop/scripts/` | `discover.py`, `check_readme.py` and the modules they share |
 | `plugin.json`, `.claude-plugin/` | Plugin manifests for Claude Code, Codex, Antigravity and Grok |
 | `action.yml` | The GitHub Action around `check_readme.py` |
-| `docs/check-example.txt` | The checker run shown at the top of the README, kept equal to a real run by the tests |
 | `tests/` | Unit tests and fixtures (fixture skills are stored as `SKILL.md.in`, so skill installers do not list them) |
 
 ## Test

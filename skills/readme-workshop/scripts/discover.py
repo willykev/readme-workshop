@@ -35,7 +35,7 @@ import formats  # noqa: E402
 import safety  # noqa: E402
 from safety import is_secret_path  # noqa: E402,F401  (part of this module's interface)
 
-VERSION = "0.1.0"
+VERSION = "0.1.1"
 
 SKIP_DIRS = {
     ".git", "node_modules", "vendor", "dist", "build", "target", "out", ".venv", "venv", "env",

@@ -15,8 +15,9 @@ does. For a quick start, see the [README](../README.md).
 
 ## Install
 
-The skill is one folder, `skills/readme-workshop/`. Each agent below can
-install it as a plugin, which also keeps it up to date.
+The skill is one folder, `skills/readme-workshop/`. Claude Code, Codex,
+Grok and Antigravity install it as a plugin; [Update, switch off and
+remove](#update-switch-off-and-remove) says how to update each.
 
 ### Claude Code
 
@@ -25,7 +26,8 @@ claude plugin marketplace add willykev/readme-workshop
 claude plugin install readme-workshop@readme-workshop
 ```
 
-Start a new session; `/plugin` lists it as installed.
+Start a new session; `claude plugin list` (or `/plugin` inside a session)
+shows it as enabled.
 
 ### Codex
 
@@ -34,17 +36,23 @@ codex plugin marketplace add willykev/readme-workshop
 codex plugin add readme-workshop@readme-workshop
 ```
 
+`codex plugin list` shows it as installed and enabled.
+
 ### Grok
 
 ```sh
 grok plugin install willykev/readme-workshop --trust
 ```
 
+`grok plugin list` shows it.
+
 ### Antigravity
 
 ```sh
 agy plugin install https://github.com/willykev/readme-workshop
 ```
+
+`agy plugin list` shows it.
 
 ### Any agent that reads Agent Skills
 
@@ -57,34 +65,49 @@ gh skill install willykev/readme-workshop readme-workshop --agent claude-code
 Or copy `skills/readme-workshop/` into the agent's skills folder (for
 example `~/.agents/skills/` or `~/.claude/skills/`).
 
+### Try a change from a clone
+
+Point Claude Code at the clone for one session, without installing it:
+
+```sh
+claude --plugin-dir path/to/readme-workshop
+```
+
 ### Requirements
 
 An agent that can read files and run shell commands. The two scripts need
 Python 3.11 or later and nothing else; without Python the skill still
 works, following the same steps by hand.
 
-### Update and remove
+### Update, switch off and remove
 
-Plugins update with the host's own command (`claude plugin update
-readme-workshop`, `codex plugin marketplace upgrade`, `grok plugin update`,
-reinstall for Antigravity). Remove with `claude plugin uninstall
-readme-workshop`, `codex plugin remove readme-workshop@readme-workshop`, `grok plugin
-uninstall readme-workshop` or `agy plugin uninstall readme-workshop`, or
-delete the copied folder. It keeps nothing outside its own folder.
+| Agent | Update | Switch off | Remove |
+|---|---|---|---|
+| Claude Code | `claude plugin update readme-workshop` | `claude plugin disable readme-workshop` | `claude plugin uninstall readme-workshop`, then `claude plugin marketplace remove readme-workshop` |
+| Codex | `codex plugin marketplace upgrade`, then `codex plugin add readme-workshop@readme-workshop` again | Remove it | `codex plugin remove readme-workshop@readme-workshop`, then `codex plugin marketplace remove readme-workshop` |
+| Grok | `grok plugin update` | `grok plugin disable readme-workshop` | `grok plugin uninstall readme-workshop` |
+| Antigravity | Uninstall, then install again | `agy plugin disable readme-workshop` | `agy plugin uninstall readme-workshop` |
+| `gh skill` | `gh skill update` | Remove it | Delete the folder it installed |
+
+Start a new session after any of these. The skill keeps nothing outside
+its own folder.
 
 ## Write a README
 
-Ask in your own words: "Write a README for this project." The agent loads
-the skill, reads the project, and then stops four times for you to agree:
+Ask in your own words: "Use readme-workshop to write a README for this
+project." Naming the skill helps the agent load it. It reads the
+project, and then stops four times for you to agree:
 
 1. **The reader and the job.** What the project is, who it is for, how it
    is installed, the first useful result, and what it could not find out.
-   Correct anything wrong; answer the questions it asks.
+   Correct anything wrong; answer the questions it asks. The
+   [example session](example-session.md) shows a real one.
 2. **What to highlight.** Eight to twelve candidate features with their
    evidence and score, the four to seven it recommends, its guesses listed
    apart. Reorder, drop or add.
 3. **The plan.** Three pitches to choose from, the sections in order, and
-   how it will show the project working. Nothing runs before you agree.
+   how it will show the project working. Nothing from the project runs
+   before you agree.
 4. **The exact draft.** The whole page, every file it would add or change,
    the checker's result and any claim it could not verify. It writes only
    after you say yes.
@@ -274,13 +297,13 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
-      - uses: willykev/readme-workshop@v0.1.0
+      - uses: willykev/readme-workshop@v0.1.1
         with:
           use-config: false
 ```
 
 A tag can be moved after you review it; for a fixed version, use the
-release's full commit SHA in place of `v0.1.0`, with the version in a
+release's full commit SHA in place of `v0.1.1`, with the version in a
 comment, and let Dependabot keep it current.
 
 | Input | Default | Does |
@@ -290,7 +313,7 @@ comment, and let Dependabot keep it current.
 | `strict` | `false` | Fail on warnings too |
 | `kind` | | Project kinds, as for `--kind` |
 | `python-version` | `3.12` | Installs Python with `actions/setup-python`; empty uses the runner's `python3` (3.11 or later, and not inside the checkout) |
-| `use-config` | `true` | Read the project's `.readme-workshop.json`; set `false` for pull requests from outside contributors, so a change cannot switch checks off |
+| `use-config` | `true` | Read the project's `.readme-workshop.json`; set `false` for pull requests from outside contributors, so the pull request's own settings file cannot switch checks off |
 
 Findings appear as annotations on the pull request; the job fails on
 errors (and on warnings with `strict: true`). It needs only `contents:

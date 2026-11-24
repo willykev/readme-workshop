@@ -1,9 +1,0 @@
-README-bad.md: warning RW101 The page has 42 prose words; an extension README reads best with 200 to 1600.
-    Fix: Add what an installer needs to know.
-README-bad.md: manual RW203 This is an extension.
-    Fix: Install it in each host the README names and confirm it loads there.
-README-bad.md:8: manual RW202 The page shows commands.
-    Fix: Run each one as written, in a scratch folder, and confirm it does what the page says.
-README-bad.md:17: error RW011 The tool delete_note is not registered in the code.
-    Fix: Use the registered name (add_note, search_notes), or remove the row.
-1 error, 1 warning, 2 manual checks (extension; 42 words).
