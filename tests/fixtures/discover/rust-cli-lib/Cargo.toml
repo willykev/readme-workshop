@@ -1,0 +1,17 @@
+[package]
+name = "wordfreq"
+version = "0.4.1"
+edition = "2021"
+description = "Count the words in text files"
+license = "MIT"
+repository = "https://example.org/wordfreq"
+
+[lib]
+path = "src/lib.rs"
+
+[[bin]]
+name = "wordfreq"
+path = "src/main.rs"
+
+[dependencies]
+clap = { version = "4", features = ["derive"] }

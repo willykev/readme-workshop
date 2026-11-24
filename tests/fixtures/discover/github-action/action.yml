@@ -1,0 +1,27 @@
+name: 'Changelog Check'
+description: 'Fail a pull request that does not add a changelog entry'
+author: 'Changelog Check contributors'
+branding:
+  icon: 'book-open'
+  color: 'blue'
+inputs:
+  token:
+    description: 'Token used to read the pull request'
+    required: true
+  changelog-path:
+    description: 'Where the changelog lives'
+    required: false
+    default: 'CHANGELOG.md'
+  fail-on-missing:
+    description: >
+      Fail the check when no entry is found,
+      instead of leaving a warning.
+    default: true
+#  legacy-mode:
+#    description: 'Read the old format'
+outputs:
+  entry:
+    description: 'The changelog entry that was found'
+runs:
+  using: 'node20'
+  main: 'dist/index.js'

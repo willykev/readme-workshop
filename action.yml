@@ -1,0 +1,93 @@
+name: README check
+description: Check a README against the project it describes, and show the findings as annotations on the pull request.
+author: readme-workshop contributors
+branding:
+  icon: book-open
+  color: blue
+
+inputs:
+  readme:
+    description: README path, relative to root.
+    required: false
+    default: README.md
+  root:
+    description: Project folder. Nothing outside it is read.
+    required: false
+    default: .
+  strict:
+    description: Fail on warnings as well as errors ('true' or 'false').
+    required: false
+    default: 'false'
+  kind:
+    description: Project kinds, comma-separated (app, terminal, service, library, extension, automation). Empty finds them from the code.
+    required: false
+    default: ''
+  use-config:
+    description: Read the project's .readme-workshop.json ('true' or 'false'). Set 'false' when the checked tree comes from someone else, such as a pull request from a fork. Its ignore list can never silence RW013, RW014 or RW114.
+    required: false
+    default: 'true'
+  python-version:
+    description: Python to install with actions/setup-python (3.11 or newer). Empty uses the runner's own python3, which must be 3.11 or newer.
+    required: false
+    default: '3.12'
+
+runs:
+  using: composite
+  steps:
+    - name: Set up Python
+      if: inputs.python-version != ''
+      uses: actions/setup-python@6d4fd22b20465ccc0f7354476588e8df7c9ca0e0 # v7.1.0
+      with:
+        python-version: ${{ inputs.python-version }}
+
+    - name: Check the README
+      shell: bash
+      env:
+        RW_SCRIPT: ${{ github.action_path }}/skills/readme-workshop/scripts/check_readme.py
+        RW_README: ${{ inputs.readme }}
+        RW_ROOT: ${{ inputs.root }}
+        RW_STRICT: ${{ inputs.strict }}
+        RW_KIND: ${{ inputs.kind }}
+        RW_USE_CONFIG: ${{ inputs.use-config }}
+      run: |
+        py=$(command -v python3 || command -v python || true)
+        if [ -n "$py" ] && [ -n "${GITHUB_WORKSPACE:-}" ]; then
+          # Both the folder it is run from (Python finds its prefix there) and the program itself,
+          # every symlink to it followed, must lie outside the checkout.
+          py_dir=$(cd -- "$(dirname -- "$py")" && pwd -P)
+          real=$py
+          for _ in $(seq 40); do
+            [ -L "$real" ] || break
+            link=$(readlink -- "$real")
+            case "$link" in /*) real=$link ;; *) real=$(dirname -- "$real")/$link ;; esac
+          done
+          real=$(cd -- "$(dirname -- "$real")" && pwd -P)/$(basename -- "$real")
+          workspace=$(cd -- "$GITHUB_WORKSPACE" && pwd -P)
+          for where in "$py_dir/" "$real"; do
+            case "$where" in
+              "$workspace"/*)
+                echo "::error title=README check::$py is inside the checkout. Set the python-version input, or install Python outside it."
+                exit 2 ;;
+            esac
+          done
+        fi
+        # -I -S -B: ignore PYTHON* variables, site-packages and startup files, and write no bytecode.
+        if [ -z "$py" ] || ! "$py" -I -S -B -c 'import sys; sys.exit(sys.version_info < (3, 11))'; then
+          echo "::error title=README check::Python 3.11 or newer is needed. Set the python-version input, or install it before this step."
+          exit 2
+        fi
+        args=(--root="$RW_ROOT" --readme="$RW_README" --format=github)
+        case "$RW_STRICT" in
+          true) args+=(--strict) ;;
+          false) ;;
+          *) echo "::error title=README check::strict must be 'true' or 'false'."; exit 2 ;;
+        esac
+        if [ -n "$RW_KIND" ]; then args+=(--kind="$RW_KIND"); fi
+        case "$RW_USE_CONFIG" in
+          true) ;;
+          false) args+=(--no-config) ;;
+          *) echo "::error title=README check::use-config must be 'true' or 'false'."; exit 2 ;;
+        esac
+        # -I -S -B: the checker loads only its own modules, ignores PYTHON* variables, site-packages
+        # and startup files, and writes no bytecode.
+        "$py" -I -S -B "$RW_SCRIPT" "${args[@]}"

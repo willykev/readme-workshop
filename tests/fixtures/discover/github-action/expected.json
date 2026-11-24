@@ -1,0 +1,44 @@
+{
+  "kinds": [
+    [
+      "automation",
+      "github-action"
+    ]
+  ],
+  "entry_points": [],
+  "channels": [],
+  "surfaces": {
+    "env": [
+      "GITHUB_REF"
+    ],
+    "cli": [],
+    "api": []
+  },
+  "action": {
+    "name": "Changelog Check",
+    "runs": "node20",
+    "certain": true,
+    "inputs": {
+      "token": {
+        "required": true,
+        "default": null
+      },
+      "changelog-path": {
+        "required": false,
+        "default": "CHANGELOG.md"
+      },
+      "fail-on-missing": {
+        "required": null,
+        "default": "True"
+      }
+    },
+    "outputs": [
+      "entry"
+    ]
+  },
+  "never": [
+    "legacy-mode",
+    "debug-only",
+    "debugOnly"
+  ]
+}

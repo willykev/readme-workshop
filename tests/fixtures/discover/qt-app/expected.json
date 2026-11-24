@@ -1,0 +1,45 @@
+{
+  "kinds": [
+    [
+      "app",
+      "desktop"
+    ]
+  ],
+  "entry_points": [
+    "tally"
+  ],
+  "channels": [
+    "pacman"
+  ],
+  "platforms": [
+    "linux",
+    "wayland"
+  ],
+  "surfaces": {
+    "shortcuts": [
+      "Ctrl+N",
+      "StandardKey.Quit",
+      "Ctrl+Z",
+      "Ctrl+Shift+Z"
+    ],
+    "cli": [
+      "--new-window",
+      "--reset"
+    ],
+    "env": [
+      "TALLY_HOME"
+    ],
+    "api": [],
+    "tools": [],
+    "routes": []
+  },
+  "never": [
+    "Ctrl+Shift+D",
+    "--legacy-mode",
+    "--selftest",
+    "Ctrl+Alt+X",
+    "_TALLY_PRIVATE",
+    "_private_helper",
+    "_privateHelper"
+  ]
+}

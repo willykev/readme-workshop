@@ -1,0 +1,89 @@
+name: test
+
+on:
+  push:
+  pull_request:
+
+permissions:
+  contents: read
+
+jobs:
+  test:
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [ubuntu-latest, macos-latest, windows-latest]
+        python: ["3.11", "3.13"]
+    runs-on: ${{ matrix.os }}
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+      - uses: actions/setup-python@6d4fd22b20465ccc0f7354476588e8df7c9ca0e0 # v7.1.0
+        with:
+          python-version: ${{ matrix.python }}
+      - run: python -m unittest discover -s tests -v
+
+  action:
+    # Runs this repository's own composite Action, as a workflow that uses it would.
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+      - name: A clean README passes, even with strict
+        uses: ./
+        with:
+          root: tests/fixtures/check/good
+          strict: 'true'
+      - name: A README with errors fails
+        id: errors
+        continue-on-error: true
+        uses: ./
+        with:
+          root: tests/fixtures/check/hello-action
+          readme: README-bad.md
+      - name: Warnings pass without strict (use-config false drops the fixture's word range)
+        uses: ./
+        with:
+          root: tests/fixtures/check/good
+          use-config: 'false'
+      - name: Warnings fail with strict
+        id: warnings
+        continue-on-error: true
+        uses: ./
+        with:
+          root: tests/fixtures/check/good
+          use-config: 'false'
+          strict: 'true'
+      - name: The failing runs failed
+        if: steps.errors.outcome != 'failure' || steps.warnings.outcome != 'failure'
+        run: |
+          echo "::error title=Action test::errors=${{ steps.errors.outcome }} warnings=${{ steps.warnings.outcome }}; both should be failure"
+          exit 1
+      - name: They fail with exit 1 and the findings they test, not a crash or bad usage
+        shell: bash
+        env:
+          RW_SCRIPT: skills/readme-workshop/scripts/check_readme.py
+        run: |
+          # The Action's own shell step, run as the Action runs it, so that its status and output can be read.
+          step=$(python3 -I -S -B -c 'import sys; sys.path.insert(0, "skills/readme-workshop/scripts"); import formats
+          data, certain = formats.read_yaml(open("action.yml", encoding="utf-8").read()); assert certain
+          print(next(s["run"] for s in data["runs"]["steps"] if "run" in s))')
+          expect() {  # expect "RULE..." VAR=VALUE...
+            local rules=$1 out status rule
+            shift
+            set +e
+            out=$(env RW_README=README.md RW_STRICT=false RW_KIND= RW_USE_CONFIG=true "$@" bash -c "$step")
+            status=$?
+            set -e
+            printf '%s\n' "$out" | sed 's/^::/: :/'
+            if [ "$status" -ne 1 ]; then
+              echo "::error title=Action test::$* exited $status; it should exit 1"
+              exit 1
+            fi
+            for rule in $rules; do
+              if ! printf '%s\n' "$out" | grep -q "title=$rule::"; then
+                echo "::error title=Action test::$* reported no $rule"
+                exit 1
+              fi
+            done
+          }
+          expect "RW009" RW_ROOT=tests/fixtures/check/hello-action RW_README=README-bad.md
+          expect "RW101" RW_ROOT=tests/fixtures/check/good RW_USE_CONFIG=false RW_STRICT=true

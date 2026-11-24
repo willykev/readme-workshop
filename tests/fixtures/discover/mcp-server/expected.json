@@ -1,0 +1,44 @@
+{
+  "kinds": [
+    [
+      "extension",
+      "mcp-server"
+    ]
+  ],
+  "entry_points": [
+    "weather-mcp"
+  ],
+  "channels": [
+    "npm"
+  ],
+  "surfaces": {
+    "tools": [
+      "get_forecast",
+      "get_alerts"
+    ],
+    "env": [
+      "WEATHER_API_KEY"
+    ],
+    "cli": [],
+    "api": []
+  },
+  "tool_descriptions": {
+    "get_forecast": "Get the forecast for a city",
+    "get_alerts": "Active weather alerts for a state"
+  },
+  "dynamic": [
+    "src/index.ts"
+  ],
+  "never": [
+    "legacy_lookup",
+    "test_only_tool",
+    "_privateHelper",
+    "get_sunrise"
+  ],
+  "lines": {
+    "tools": {
+      "get_forecast": 10,
+      "get_alerts": 17
+    }
+  }
+}

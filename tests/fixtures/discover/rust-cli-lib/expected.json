@@ -1,0 +1,46 @@
+{
+  "kinds": [
+    [
+      "terminal",
+      "cli"
+    ],
+    [
+      "library",
+      null
+    ]
+  ],
+  "entry_points": [
+    "wordfreq"
+  ],
+  "channels": [
+    "crates"
+  ],
+  "surfaces": {
+    "cli": [
+      "wordfreq",
+      "--top",
+      "--json",
+      "count",
+      "compare"
+    ],
+    "api": [
+      "report",
+      "SortOrder",
+      "Frequencies",
+      "count_words"
+    ],
+    "env": [
+      "WORDFREQ_COLOR"
+    ]
+  },
+  "never": [
+    "tokenize",
+    "helper",
+    "debug_internals",
+    "legacy_count",
+    "--debug-dump",
+    "self-test",
+    "legacy",
+    "--test-only-flag"
+  ]
+}

@@ -1,0 +1,9 @@
+---
+name: commit-coach
+description: Reviews a commit message against the project's conventions and suggests a better one. Use when writing or amending a commit.
+license: MIT
+---
+
+# Commit coach
+
+Read `references/style.md`, then check the message.

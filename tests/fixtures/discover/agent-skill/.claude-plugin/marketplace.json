@@ -1,0 +1,13 @@
+{
+  "name": "commit-coach-marketplace",
+  "owner": {
+    "name": "commit-coach contributors"
+  },
+  "plugins": [
+    {
+      "name": "commit-coach",
+      "source": "./",
+      "description": "Reviews commit messages."
+    }
+  ]
+}

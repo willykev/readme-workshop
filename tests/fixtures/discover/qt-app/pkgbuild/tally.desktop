@@ -1,0 +1,8 @@
+[Desktop Entry]
+Type=Application
+Name=Tally
+Comment=A counter for the desktop
+Exec=tally %f
+Icon=tally
+Terminal=false
+Categories=Utility;

@@ -1,0 +1,51 @@
+{
+  "kinds": [
+    [
+      "extension",
+      "agent-skill"
+    ],
+    [
+      "extension",
+      "agent-plugin"
+    ]
+  ],
+  "entry_points": [],
+  "channels": [
+    "gh-skill",
+    "claude-plugin"
+  ],
+  "channel_names": {
+    "gh-skill": "commit-coach",
+    "claude-plugin": "commit-coach"
+  },
+  "surfaces": {
+    "skills": [
+      "commit-coach"
+    ],
+    "commands": [
+      "coach"
+    ],
+    "hooks": [
+      "PreToolUse"
+    ],
+    "cli": [],
+    "api": []
+  },
+  "never": [
+    "test-skill",
+    "_private-helper",
+    "--debug-dump",
+    "lint_message"
+  ],
+  "lines": {
+    "skills": {
+      "commit-coach": 2
+    },
+    "commands": {
+      "coach": 1
+    },
+    "hooks": {
+      "PreToolUse": 3
+    }
+  }
+}

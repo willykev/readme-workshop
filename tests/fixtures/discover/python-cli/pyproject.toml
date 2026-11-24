@@ -1,0 +1,17 @@
+[build-system]
+requires = ["setuptools>=68"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "notekeeper"
+version = "1.2.0"
+description = "Keep short notes from the terminal"
+license = "MIT"
+requires-python = ">=3.11"
+classifiers = ["Operating System :: OS Independent"]
+
+[project.scripts]
+notekeeper = "notekeeper.cli:main"
+
+[project.urls]
+Homepage = "https://example.org/notekeeper"

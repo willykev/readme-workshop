@@ -1,0 +1,35 @@
+{
+  "kinds": [
+    [
+      "service",
+      "web"
+    ]
+  ],
+  "entry_points": [],
+  "channels": [
+    "docker"
+  ],
+  "surfaces": {
+    "routes": [
+      "GET /",
+      "GET /items",
+      "POST /items",
+      "DELETE /items/<int:item_id>",
+      "GET /health"
+    ],
+    "env": [
+      "APP_ENV",
+      "DATABASE_URL",
+      "LOG_LEVEL",
+      "POSTGRES_USER",
+      "POSTGRES_PASSWORD"
+    ],
+    "cli": [],
+    "api": []
+  },
+  "never": [
+    "/admin",
+    "/test-only",
+    "_private_helper"
+  ]
+}

@@ -1,0 +1,40 @@
+{
+  "kinds": [
+    [
+      "library",
+      null
+    ]
+  ],
+  "entry_points": [],
+  "channels": [
+    "npm"
+  ],
+  "surfaces": {
+    "api": [
+      "Separator",
+      "SlugOptions",
+      "DEFAULT_SEPARATOR",
+      "slugify",
+      "isSlug",
+      "SlugRegistry",
+      "transliterate"
+    ],
+    "cli": [],
+    "env": []
+  },
+  "api_kinds": {
+    "slugify": "function",
+    "SlugRegistry": "class",
+    "DEFAULT_SEPARATOR": "const",
+    "SlugOptions": "type",
+    "transliterate": "function"
+  },
+  "never": [
+    "normalizeSpaces",
+    "_privateHelper",
+    "internalReset",
+    "legacySlug",
+    "testOnlyHelper",
+    "unexportedFromIndex"
+  ]
+}

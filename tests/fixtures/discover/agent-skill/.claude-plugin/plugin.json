@@ -1,0 +1,6 @@
+{
+  "name": "commit-coach",
+  "version": "1.0.0",
+  "description": "Reviews commit messages against the project's conventions.",
+  "license": "MIT"
+}

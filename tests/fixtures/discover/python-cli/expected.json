@@ -1,0 +1,39 @@
+{
+  "kinds": [
+    [
+      "terminal",
+      "cli"
+    ]
+  ],
+  "entry_points": [
+    "notekeeper"
+  ],
+  "channels": [
+    "pypi"
+  ],
+  "platforms": [
+    "any"
+  ],
+  "surfaces": {
+    "cli": [
+      "notekeeper",
+      "--store",
+      "add",
+      "--tag",
+      "list",
+      "--limit",
+      "search"
+    ],
+    "env": [
+      "NOTEKEEPER_HOME"
+    ],
+    "api": []
+  },
+  "never": [
+    "debug-dump",
+    "legacy-import",
+    "--debug-trace",
+    "selftest",
+    "_private_helper"
+  ]
+}
