@@ -123,8 +123,8 @@ way:
   command-line tools, services, libraries, agent skills and plugins, MCP
   servers, and GitHub Actions.
 - **Built-in CI checker.** `check_readme.py` catches broken links and
-  anchors, leftover placeholders, stale examples, command or option names
-  that don't match the code, and accidental secrets.
+  anchors, leftover placeholders, stale examples, accidental secrets, and
+  mismatched Action inputs, MCP tools, binaries, or plugin and skill names.
 
 ## Check a README in CI
 
@@ -133,7 +133,7 @@ annotations. It fails the job on errors, and on warnings when `strict:
 true`. It only needs `contents: read`:
 
 ```yaml
-- uses: willykev/readme-workshop@v0.1.3
+- uses: willykev/readme-workshop@v0.1.4
   with:
     use-config: false   # recommended for pull requests from forks
 ```

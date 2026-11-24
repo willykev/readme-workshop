@@ -327,6 +327,14 @@ class Parity(Base):
         result = check_readme.check(str(FIXTURES / "skill-kit"), text=text, kinds=["library"], config=WIDE)
         self.assertNotIn("RW012", self.ids(result))
 
+    def test_rw012_ignores_repo_slugs_and_urls_in_plugin_install(self):
+        root = self.tree({"plugin.json": '{"name": "acme-cli"}'})
+        text = ("# acme-cli\n\n```sh\ngrok plugin install acme-labs/acme-cli --trust\n"
+                "agy plugin install https://github.com/acme-labs/acme-cli\n```\n")
+        self.lacks(text, "RW012", root=root)
+        http_root = self.tree({"plugin.json": '{"name": "http"}'})
+        self.lacks("# http\n\n```sh\nagy plugin install https://github.com/acme/http\n```\n", "RW012", root=http_root)
+
     def test_kinds_come_from_discovery(self):
         result = check_readme.check(str(FIXTURES / "hello-action"), config=WIDE)
         self.assertIn("automation", result["kinds"])

@@ -1,4 +1,5 @@
 import builtins
+import io
 import json
 import ntpath
 import os
@@ -1201,6 +1202,47 @@ class GitTests(TempTree):
         self.assertIsNotNone(result["history"]["since_error"])
         self.assertEqual(result["history"]["changed"], [])
 
+    def test_run_git_waits_for_clean_exit_after_stdout_eof(self):
+        class SlowReapProc:
+            def __init__(self, hang=False):
+                self.stdout = io.BytesIO(b"42\n")
+                self.returncode = None
+                self.killed = False
+                self.hang = hang
+
+            def poll(self):
+                return self.returncode
+
+            def wait(self, timeout=None):
+                if timeout is not None and self.hang:
+                    raise subprocess.TimeoutExpired(["git"], timeout)
+                if self.returncode is None:
+                    self.returncode = -9 if self.killed else 0
+                return self.returncode
+
+            def kill(self):
+                self.killed = True
+                self.returncode = -9
+
+        healthy = SlowReapProc(hang=False)
+        with mock.patch.object(discover.subprocess, "Popen", return_value=healthy):
+            self.assertEqual(discover.run_git("/usr/bin/git", self.root, {}, ["rev-list"]), "42\n")
+        self.assertFalse(healthy.killed)
+
+        stuck = SlowReapProc(hang=True)
+        with mock.patch.object(discover.subprocess, "Popen", return_value=stuck):
+            self.assertIsNone(discover.run_git("/usr/bin/git", self.root, {}, ["rev-list"]))
+        self.assertTrue(stuck.killed)
+
+    def test_image_headers_read_through_the_pinned_tree(self):
+        # Minimal 1x1 PNG header.
+        png = b"\x89PNG\r\n\x1a\n" + struct.pack(">I", 13) + b"IHDR" + struct.pack(">II", 1, 1) + b"\x00" * 5
+        with open(os.path.join(self.root, "shot.png"), "wb") as f:
+            f.write(png)
+        with mock.patch.object(discover.safety, "read_regular", side_effect=AssertionError("bypassed pinned tree")):
+            result = discover.scan(self.root)
+        self.assertEqual(result["pictures"]["images"], [{"path": "shot.png", "bytes": len(png), "width": 1, "height": 1}])
+
 
 class OpenCount:
     """The names of the files os.open opens, by path or below a folder descriptor."""
@@ -1281,6 +1323,23 @@ class CommandLineTests(unittest.TestCase):
         self.assertEqual(self.run_script("--format", "xml").returncode, 2)
         self.assertEqual(self.run_script("--max-files", "0").returncode, 2)
         self.assertEqual(self.run_script("--bogus").returncode, 2)
+
+    def test_non_ascii_output_reconfigures_non_utf8_stdout(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            with open(os.path.join(tmp, "package.json"), "w", encoding="utf-8") as f:
+                json.dump({"name": "arrow-tool", "description": "Converts input \u2192 output \u2713"}, f)
+            for fmt in ("json", "text"):
+                with self.subTest(fmt=fmt):
+                    buf = io.BytesIO()
+                    stream = io.TextIOWrapper(buf, encoding="ascii")
+                    with mock.patch.object(sys, "stdout", stream):
+                        code = discover.main(["--root", tmp, "--format", fmt])
+                    stream.flush()
+                    self.assertEqual(code, 0)
+                    out = buf.getvalue().decode("utf-8")
+                    self.assertIn("arrow-tool", out)
+                    if fmt == "json":
+                        self.assertIn("\u2192", out)
 
 
 if __name__ == "__main__":

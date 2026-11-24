@@ -1,5 +1,18 @@
 # Changelog
 
+## 0.1.4 — 2026-11-23
+
+- Fixed a race in `discover.py`'s `run_git()` that could kill a healthy `git`
+  process between stdout EOF and process exit.
+- Fixed `check_readme.py` rule `RW012` raising false errors on `OWNER/REPO`
+  and URL plugin install commands (such as Grok and Antigravity installs).
+- Reconfigured `sys.stdout` and `sys.stderr` to UTF-8 in `discover.py` so
+  non-ASCII repo metadata does not crash on Windows / non-UTF-8 locales.
+- Passed the pinned `safety.Tree` handle into `image_size()` during
+  discovery instead of reopening the root path per image.
+- Clarified the `README.md` CI checker summary to match what `check_readme.py`
+  checks (Action inputs, MCP tools, binaries, and plugin/skill names).
+
 ## 0.1.3 — 2026-11-23
 
 - Improved the skill's writing guidance (`references/page.md`), verification

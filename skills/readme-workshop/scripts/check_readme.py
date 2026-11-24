@@ -38,7 +38,7 @@ import mdfacts  # noqa: E402
 import safety  # noqa: E402
 from safety import PRIVATE_KEY_RE, SECRETS, redact  # noqa: E402,F401  (redact is part of this module's interface)
 
-TOOL, VERSION = "check_readme", "0.1.3"
+TOOL, VERSION = "check_readme", "0.1.4"
 
 # Prose words a README of each kind reads best with (RW101). With several
 # kinds, the widest range applies.
@@ -980,7 +980,7 @@ def rule_names(c):
         if c.facts["line_kinds"][idx] == "comment":
             continue
         checks = [(m.group(1), plugins, "plugin.json")
-                  for m in re.finditer(r"(?:^|[\s`/])plugin install\s+([\w.-]+)(?:@([\w.-]+))?", line)
+                  for m in re.finditer(r"(?:^|[\s`/])plugin install\s+([\w.-]+)(?:@([\w.-]+))?(?![\w.:/@-])", line)
                   if m.group(2) in markets or any(looks_like(m.group(1).lower(), p.lower()) for p in plugins)]
         checks += [(m.group(2), skills, "SKILL.md")
                    for m in re.finditer(r"\bgh skills? (?:install|add)\s+[\w.-]+/([\w.-]+)\s+([\w.-]+)", line)

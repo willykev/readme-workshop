@@ -35,7 +35,7 @@ import formats  # noqa: E402
 import safety  # noqa: E402
 from safety import is_secret_path  # noqa: E402,F401  (part of this module's interface)
 
-VERSION = "0.1.3"
+VERSION = "0.1.4"
 
 SKIP_DIRS = {
     ".git", "node_modules", "vendor", "dist", "build", "target", "out", ".venv", "venv", "env",
@@ -448,7 +448,7 @@ class Scanner:
         ext = os.path.splitext(name)[1].lower()
         if ext in IMAGE_EXT:
             # Only a bounded header is read, so pictures of any size are measured.
-            width, height = image_size(rel, self.root) if ext != ".svg" else (None, None)
+            width, height = image_size(rel, self.tree) if ext != ".svg" else (None, None)
             self.images.append({"path": rel, "bytes": size, "width": width, "height": height})
             self.files.append(rel)
             return
@@ -2163,9 +2163,11 @@ def run_git(exe, root, env, args, deadline=None):
     """Output of one git command, or None if it fails, times out, or prints more than GIT_OUTPUT_LIMIT.
 
     It may run GIT_TIMEOUT seconds, and no later than the deadline."""
-    timeout = GIT_TIMEOUT if deadline is None else min(GIT_TIMEOUT, deadline - time.monotonic())
+    started = time.monotonic()
+    timeout = GIT_TIMEOUT if deadline is None else min(GIT_TIMEOUT, deadline - started)
     if timeout <= 0:
         return None
+    end = started + timeout
     try:
         proc = subprocess.Popen([exe, *GIT_SAFE, "-C", root, *args], stdin=subprocess.DEVNULL,
                                 stdout=subprocess.PIPE, stderr=subprocess.DEVNULL, env=env)
@@ -2176,8 +2178,14 @@ def run_git(exe, root, env, args, deadline=None):
     reader.start()
     reader.join(timeout)
     timed_out = reader.is_alive()
-    if proc.poll() is None:  # still running: timed out, or stopped at the output limit
+    if timed_out or (out and len(out[0]) > GIT_OUTPUT_LIMIT):
         proc.kill()
+    else:
+        try:
+            proc.wait(timeout=max(0.0, end - time.monotonic()))
+        except subprocess.TimeoutExpired:
+            timed_out = True
+            proc.kill()
     reader.join()
     proc.wait()
     proc.stdout.close()
@@ -2431,6 +2439,9 @@ def main(argv=None):
     parser.add_argument("--max-bytes", type=int, default=262144, metavar="N", help="skip files larger than N bytes (default: 262144)")
     parser.add_argument("--format", choices=("json", "text"), default=None, help="output format (default: text on a terminal, json otherwise)")
     args = parser.parse_args(argv)
+    for stream in (sys.stdout, sys.stderr):
+        if hasattr(stream, "reconfigure"):
+            stream.reconfigure(encoding="utf-8", errors="replace")
     if args.max_files < 1 or args.max_bytes < 1:
         parser.error("--max-files and --max-bytes take a number of 1 or more")
     try:
