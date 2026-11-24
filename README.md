@@ -127,7 +127,7 @@ on the pull request. The job fails on errors, and on warnings with
 `strict: true`. It needs only `contents: read`:
 
 ```yaml
-- uses: willykev/readme-workshop@v0.1.1
+- uses: willykev/readme-workshop@v0.1.2
   with:
     use-config: false   # for pull requests from outside contributors
 ```

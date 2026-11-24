@@ -1,5 +1,11 @@
 # Changelog
 
+## 0.1.2 — 2026-11-23
+
+- The guide's Codex update is one command, `codex plugin marketplace
+  upgrade`, which also updates the installed plugin. 0.1.1 asked for
+  `codex plugin add` again afterward, which is not needed.
+
 ## 0.1.1 — 2026-11-23
 
 - The README opens with the prompt to type and the agent's real first reply,
@@ -8,8 +14,7 @@
   rest. `docs/example-session.md` holds the whole reply.
 - The guide says how to check the plugin loaded in Claude Code, Codex,
   Grok and Antigravity, how to try a change from a clone, and how to
-  update, switch off and remove it, in one table with a row per agent. Codex needs `codex plugin add` again after
-  `codex plugin marketplace upgrade` to pick up a new version.
+  update, switch off and remove it, in one table with a row per agent.
 - `discover.py` and `check_readme.py` report version 0.1.1.
 
 ## 0.1.0 — 2026-11-23

@@ -84,7 +84,7 @@ works, following the same steps by hand.
 | Agent | Update | Switch off | Remove |
 |---|---|---|---|
 | Claude Code | `claude plugin update readme-workshop` | `claude plugin disable readme-workshop` | `claude plugin uninstall readme-workshop`, then `claude plugin marketplace remove readme-workshop` |
-| Codex | `codex plugin marketplace upgrade`, then `codex plugin add readme-workshop@readme-workshop` again | Remove it | `codex plugin remove readme-workshop@readme-workshop`, then `codex plugin marketplace remove readme-workshop` |
+| Codex | `codex plugin marketplace upgrade` | Remove it | `codex plugin remove readme-workshop@readme-workshop`, then `codex plugin marketplace remove readme-workshop` |
 | Grok | `grok plugin update` | `grok plugin disable readme-workshop` | `grok plugin uninstall readme-workshop` |
 | Antigravity | Uninstall, then install again | `agy plugin disable readme-workshop` | `agy plugin uninstall readme-workshop` |
 | `gh skill` | `gh skill update` | Remove it | Delete the folder it installed |
@@ -297,13 +297,13 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
-      - uses: willykev/readme-workshop@v0.1.1
+      - uses: willykev/readme-workshop@v0.1.2
         with:
           use-config: false
 ```
 
 A tag can be moved after you review it; for a fixed version, use the
-release's full commit SHA in place of `v0.1.1`, with the version in a
+release's full commit SHA in place of `v0.1.2`, with the version in a
 comment, and let Dependabot keep it current.
 
 | Input | Default | Does |
